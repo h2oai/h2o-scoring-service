@@ -1,0 +1,13 @@
+dependencies {
+    compile "ai.h2o:h2o-genmodel:${h2oVersion}"
+    compile "org.reflections:reflections:0.9.10"
+
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
+
+    testCompile 'org.testng:testng:6.9.4'
+}
+
+test {
+    useTestNG()
+}

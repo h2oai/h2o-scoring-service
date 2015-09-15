@@ -1,0 +1,5 @@
+rootProject.name = 'h2o-scoring-service'
+
+include 'backend'
+include 'frontend-thrift'
+include 'pojo-assembler'

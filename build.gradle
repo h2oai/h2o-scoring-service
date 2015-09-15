@@ -1,0 +1,99 @@
+//
+// The top-level h2o-scoring-server project
+//
+
+// The build script settings to fetch plugins and put them on
+// classpath
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.1'
+        classpath 'gradle.plugin.org.jruyi.gradle:thrift-gradle-plugin:0.3.0'
+    }
+}
+
+//
+// Common configuration
+//
+ext {
+    javaProjects = [
+            project(':backend'),
+            project(':frontend-thrift'),
+            project(':pojo-assembler')
+    ]
+
+    scalaProjects = [
+    ]
+}
+
+//
+// For all projects (this and all subprojects) specify common properties and tasks
+//
+allprojects {
+    ext {
+        h2oVersion = "$h2oMajorVersion.$h2oBuild"
+        isRelease = rootProject.hasProperty("doRelease")
+    }
+}
+
+// 
+// Common configuration for all subprojects
+//
+subprojects {
+    // All project inherits the same versioning number
+    version = rootProject.version
+    group = rootProject.group
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://repository.cloudera.com/artifactory/cloudera-repos/"
+        }
+        maven {
+            url "http://repo.hortonworks.com/content/repositories/releases/"
+        }
+        maven {
+            url "http://repo.hortonworks.com/content/repositories/jetty-hadoop/"
+        }
+        maven {
+            url "http://repository.mapr.com/maven/"
+        }
+        // Lets use S3 maven repository for nightlies
+        if (h2oMajorName == "bleeding_edge") {
+          maven {
+              url "http://h2o-release.s3.amazonaws.com/h2o/master/$h2oBuild/maven/repo/"
+          }
+        }
+        mavenLocal()
+    }
+
+    //
+    // Early configuration of projects simplifies build resolution
+    //
+
+    // Configure Java projects
+    if (project in javaProjects) {
+        apply from: "$rootDir/gradle/java.gradle"
+        if (project.hasProperty("doCheckStyle")) {
+            apply from: "$rootDir/gradle/checkstyle.gradle"
+        }
+    }
+
+    // Configure Scala projects
+    if (project in scalaProjects) {
+        apply from: "$rootDir/gradle/scala.gradle"
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
+

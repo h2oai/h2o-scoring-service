@@ -1,0 +1,31 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+
+ext {
+    pojoVersion = "${pojoH2OVersion}.${pojoH2OBuild}"
+}
+
+repositories {
+    // Snapshot repository of H2O builds
+    maven {
+        url "http://h2o-release.s3.amazonaws.com/h2o/master/$pojoH2OBuild/maven/repo/"
+    }
+}
+
+dependencies {
+    //compile "ai.h2o:h2o-genmodel:${pojoVersion}"
+    compile files('lib/h2o-genmodel.jar')
+}
+
+// Setup resources
+sourceSets {
+    main {
+        java {
+            srcDirs += "src/main/pojo"
+        }
+    }
+}
+
+
+shadowJar {
+
+}
