@@ -1,6 +1,6 @@
 dependencies {
     compile project(':backend')
-    compile project(':frontend-thrift')
+    compile project(":frontend-${appFrontEnd}")
 }
 
 // Support local launch of application
@@ -14,6 +14,7 @@ shadowJar {
     // Configure name of output jar as sparkling-water-droplet-app.jar
     appendix = 'app'
     archiveName = "${baseName}-${appendix}.${extension}"
+
 }
 
 
