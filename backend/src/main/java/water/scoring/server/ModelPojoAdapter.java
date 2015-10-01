@@ -1,13 +1,20 @@
 package water.scoring.server;
 
+import hex.ModelCategory;
+import hex.genmodel.GenModel;
+import hex.genmodel.IGenModel;
+import hex.genmodel.easy.EasyPredictModelWrapper;
 import water.genmodel.IGeneratedModel;
 
 public class ModelPojoAdapter implements ModelPojo {
-  private String name;
-  private String algorithm;
-  private String modelKind;
+
+  private final String name;
+  private final String algorithm;
+  private final String modelKind;
+  private final ModelCategory modelCategory;
 
   private IGeneratedModel modelPojo;
+  private EasyPredictModelWrapper modelWrapper;
 
   public ModelPojoAdapter(String name,
                           String algorithm,
@@ -16,21 +23,38 @@ public class ModelPojoAdapter implements ModelPojo {
     this.name = name;
     this.algorithm = algorithm;
     this.modelKind = modelKind;
+    this.modelCategory = ((IGenModel) modelPojo).getModelCategory();
     this.modelPojo = modelPojo;
+    this.modelWrapper = new EasyPredictModelWrapper(asGenModel(modelPojo));
   }
 
   @Override
   public String getName() {
-    return null;
+    return name;
   }
 
   @Override
   public String getAlgo() {
-    return null;
+    return algorithm;
   }
 
   @Override
   public String getKind() {
+    return modelKind;
+  }
+
+  @Override
+  public ModelCategory getCategory() {
+    return modelCategory;
+  }
+
+  @Override
+  public String[] getColumNames() {
+    return modelPojo.getNames();
+  }
+
+  @Override
+  public String[] getColumnTypes() {
     return null;
   }
 
@@ -40,7 +64,27 @@ public class ModelPojoAdapter implements ModelPojo {
   }
 
   @Override
+  public EasyPredictModelWrapper getPredictWrapper() {
+    return modelWrapper;
+  }
+
+  @Override
   public void release() {
+    this.modelWrapper = null;
     this.modelPojo = null;
+  }
+
+  private static GenModel asGenModel(IGeneratedModel modelPojo) {
+    return (GenModel) modelPojo;
+  }
+
+  @Override
+  public String toString() {
+    return "ModelPojo{" +
+           "name='" + name + '\'' +
+           ", algorithm='" + algorithm + '\'' +
+           ", modelKind='" + modelKind + '\'' +
+           ", modelCategory=" + modelCategory +
+           '}';
   }
 }

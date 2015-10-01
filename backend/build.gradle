@@ -1,9 +1,17 @@
 dependencies {
-    compile "ai.h2o:h2o-genmodel:${h2oVersion}"
-    compile "org.reflections:reflections:0.9.10"
+    // POJO API
+    compile group: 'ai.h2o', name: 'h2o-genmodel', version: "${h2oVersion}"
 
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
+    // For dynamic loading of POJOS
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
+
+    // For command line parsing
+    compile group: 'com.beust', name: 'jcommander', version: '1.48'
+
+    // For logging
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.4'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.4'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.5.4'
 
     testCompile 'org.testng:testng:6.9.4'
 }

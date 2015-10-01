@@ -24,6 +24,7 @@ buildscript {
 //
 ext {
     javaProjects = [
+            project(':app'),
             project(':backend'),
             project(':frontend-thrift'),
             project(':pojo-assembler')

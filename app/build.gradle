@@ -1,0 +1,19 @@
+dependencies {
+    compile project(':backend')
+    compile project(':frontend-thrift')
+}
+
+// Support local launch of application
+apply plugin: 'application'
+mainClassName = 'water.scoring.ScoringServerApp'
+
+// Support for application assembly
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+    // Configure name of output jar as sparkling-water-droplet-app.jar
+    appendix = 'app'
+    archiveName = "${baseName}-${appendix}.${extension}"
+}
+
+
