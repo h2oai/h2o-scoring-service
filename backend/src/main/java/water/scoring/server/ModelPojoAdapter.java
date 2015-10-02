@@ -49,13 +49,13 @@ public class ModelPojoAdapter implements ModelPojo {
   }
 
   @Override
-  public String[] getColumNames() {
-    return modelPojo.getNames();
+  public int getFeatureCount() {
+    return getModel().getNumCols();
   }
 
   @Override
-  public String[] getColumnTypes() {
-    return null;
+  public String[] getColumNames() {
+    return modelPojo.getNames();
   }
 
   @Override

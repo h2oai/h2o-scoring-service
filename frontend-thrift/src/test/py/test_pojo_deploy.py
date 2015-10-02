@@ -26,14 +26,20 @@ print(" => model_pojo = client.deployPojoJar(binarycontent)")
 model_pojo = client.deployPojoJar(binarycontent)
 print(" <= {}\n".format(model_pojo))
 
+print("\n=== Get feature #1 type===")
+print(" => client.featureInfoByName({}, {}, 0, 25)".format(model_pojo.id, model_pojo.featureNames[0]))
+featureInfo = client.featureInfoByName(model_pojo.id, model_pojo.featureNames[0], 0, 25)
+print(" <= {}\n".format(featureInfo))
+
 row = { "Sepal.Length" : 6.4,
         "Sepal.Width"  : 3.1,
         "Petal.Length" : 5.5,
         "Petal.Width"  : 1.8,
         }
 print("\n=== Make prediction on row ===")
-print(" => client.predictMapRow({}, {})".format(model_pojo.name, row))
-prediction = client.predictMapRow(model_pojo.name, row)
-print(" <= {}".format(prediction))
+print(" => client.predictMapRow({}, {})".format(model_pojo.id, row))
+prediction = client.predictMapRow(model_pojo.id, row)
+print(" <= {}\n".format(prediction))
 
 transport.close()
+

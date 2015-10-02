@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by michal on 10/1/15.
+ * Defalt command line options for scoring server
  */
 public class ScoringServerOpts {
 
-  @Parameter(names = {"-p", "--port"}, description = "Server port to expose API.")
+  @Parameter(names = {"-p", "--port"}, description = "Exposed server port with API.")
   public Integer port = 9090;
 
   @Parameter(names = { "-j", "-modelJar"}, description = "The model jar location (can be specified multiple times)")

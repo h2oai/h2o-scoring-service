@@ -49,19 +49,22 @@ struct Prediction {
     2: PredictionHolder prediction
 }
 
-enum ColumnType {
+enum FeatureType {
     NUMERIC = 1,
     CATEGORICAL = 2
+    // NOTE POJO/H2O does not support string types at modelling level - so we do
+    // not need to consider it here
 }
 
-/** Information about model pojo */
+/** Information about a model pojo. */
 struct ModelInfo {
-    1: string name
+    1: string id
     2: string algorithm
     3: string modelKind
     4: string modelCategory
-    5: list<string> columnNames
-    6: list<ColumnType> columnTypes
+    5: i32 featureCount // Number of input features expected by model
+    6: list<string> featureNames // Input feature names
+    7: list<FeatureType> featureTypes // Input feature types
 }
 
 struct ParserSetup {
@@ -69,17 +72,39 @@ struct ParserSetup {
     2: bool header
 }
 
+/**
+ * Holder to carry information about a feature (aka column).
+ **/
+struct FeatureInfo {
+    1: string name
+    2: FeatureType type
+    3: optional list<string> categories
+    4: optional i32 arity
+}
+
 service ScoringService {
 
+    /** List all models provided by the service */
     list<ModelInfo> listModels()
 
+    /** Returns model information about specified model */
     ModelInfo modelInfo(1: string modelId) throws (1:ModelNotFoundException notFound, 2: PredictException predictException)
 
+    /** Predict row given in form of map - { (feature name, feature value), ... } */
     Prediction predictMapRow(1: string modelId, 2: map<string, double> row) throws (1:ModelNotFoundException notFound, 2: PredictException predictException)
 
+    /** Predict row given as a simple string. */
     Prediction predictStringRow(1: string modelId, 2: string row, 3: ParserSetup parserSetup) throws (1:ModelNotFoundException notFound, 2: PredictException predictException)
 
+    /** Predict row given as array of doubles. */
     Prediction predictDoubleRow(1: string modelId, 2: list<double> row) throws (1:ModelNotFoundException notFound, 2: PredictException predictException)
 
+    /** Deploy jar given as a binary stream. */
     ModelInfo deployPojoJar(1: binary modelJar)
+
+    /** Get feature information by feature name. */
+    FeatureInfo featureInfoByName(1: string modelId, 2: string name, 3: optional i32 categoricalOff = 0, 4: optional i32 categoricalLen = 25)
+
+    /** Get feature information by feature index. */
+    FeatureInfo featureInfoByIdx(1: string modelId, 2: i32 idx, 3: optional i32 categoricalOff = 0, 4: optional i32 categoricalLen = 25)
 }

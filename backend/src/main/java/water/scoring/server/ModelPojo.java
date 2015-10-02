@@ -13,8 +13,8 @@ public interface ModelPojo {
   String getKind();
   ModelCategory getCategory();
 
+  int getFeatureCount();
   String[] getColumNames();
-  String[] getColumnTypes();
 
   IGeneratedModel getModel();
   EasyPredictModelWrapper getPredictWrapper();
